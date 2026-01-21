@@ -5,7 +5,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score, classification_report
-import joblib
+import joblib, os
 
 
 # Load dataset
@@ -60,9 +60,7 @@ print("Predicted:", prediction[0])
 
 import joblib
 
-# Save the trained model
-joblib.dump(model, 'model.joblib')
+project_folder = os.path.dirname(os.path.abspath(__file__))  # root folder
 
-# Save the scaler
-joblib.dump(scaler, 'scaler.joblib')
-
+joblib.dump(model, os.path.join(project_folder, "model.joblib"))
+joblib.dump(scaler, os.path.join(project_folder, "scaler.joblib"))
