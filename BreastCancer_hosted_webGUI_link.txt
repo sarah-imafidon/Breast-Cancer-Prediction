@@ -1,0 +1,5 @@
+Name: Imafidon Sarah Omonakpen
+Matric Number: 22CD032151
+Machine Learning Algorithm Used:
+Model Persistence method used: Joblib
+Github repository Link:
