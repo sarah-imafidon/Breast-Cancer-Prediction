@@ -1,40 +1,22 @@
-from flask import Flask, render_template, request
+import streamlit as st
 import joblib
 import numpy as np
 
-app = Flask(__name__)
-
-# Load the trained model and scaler
+# Load model
 model = joblib.load("model.joblib")
 scaler = joblib.load("scaler.joblib")
 
-@app.route("/", methods=["GET", "POST"])
-def home():
-    prediction = None
-    if request.method == "POST":
-        try:
-            # Get input values from form
-            radius_mean = float(request.form["radius_mean"])
-            texture_mean = float(request.form["texture_mean"])
-            perimeter_mean = float(request.form["perimeter_mean"])
-            area_mean = float(request.form["area_mean"])
-            smoothness_mean = float(request.form["smoothness_mean"])
+st.title("Breast Cancer Predictor 💙")
 
-            # Create feature array
-            features = np.array([[radius_mean, texture_mean, perimeter_mean, area_mean, smoothness_mean]])
+# Input fields
+radius = st.number_input("Radius Mean")
+texture = st.number_input("Texture Mean")
+perimeter = st.number_input("Perimeter Mean")
+area = st.number_input("Area Mean")
+smoothness = st.number_input("Smoothness Mean")
 
-            # Scale features
-            features_scaled = scaler.transform(features)
-
-            # Predict
-            pred = model.predict(features_scaled)[0]
-
-            # Convert 0/1 to labels
-            prediction = "Malignant" if pred == 0 else "Benign"
-        except Exception as e:
-            prediction = f"Error: {e}"
-
-    return render_template("index.html", prediction=prediction)
-
-if __name__ == "__main__":
-    app.run(debug=True)
+if st.button("Predict"):
+    features = np.array([[radius, texture, perimeter, area, smoothness]])
+    features_scaled = scaler.transform(features)
+    pred = model.predict(features_scaled)[0]
+    st.success("Prediction: " + ("Malignant" if pred == 0 else "Benign"))
